@@ -117,7 +117,7 @@ public class Menu {
 		
 	}
 	
-	public void showScores() throws InterruptedException, IOException {
+	private void showScores() throws InterruptedException, IOException {
 		System.out.println(format.color("Scoring system not implemented!", "red"));
 		Thread.sleep(1500);
 	}
@@ -141,7 +141,7 @@ public class Menu {
 		input.close();
 		System.exit(-1);
 	}
-	public static void incorrectMenuChoice(String choice) throws InterruptedException {
+	private static void incorrectMenuChoice(String choice) throws InterruptedException {
 		System.out.println(format.color("'"+choice+"' is an incorrect menu choice!","red"));
 		Thread.sleep(1500);
 	}

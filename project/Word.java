@@ -45,7 +45,7 @@ public class Word implements Comparable<Word>{
 	@Override
 	public String toString() {return string;}
 	@Override
-	public int compareTo(Word o) {return string.compareTo(o.toString());}
+	public int compareTo(Word w) {return string.compareTo(w.toString());}
 	
 	// PRIVATE INNER CLASS
 	private class HiddenString {
