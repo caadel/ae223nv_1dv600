@@ -88,12 +88,12 @@ public class Game {
 				System.out.println("\n"+word.getHiddenWord().toString());
 				
 				if (incorrectChars.size() > 0) {
-					System.out.print("\nIncorrect characters: ");
+					System.out.print("\nIncorrect guesses: ");
 					for (char c : incorrectChars)
 						System.out.print(c+" ");
 				}
 				
-				System.out.println("\nGuesses left: "+(maxGuesses-guesses));
+				System.out.println("\nIncorrect guesses left: "+(maxGuesses-guesses));
 				System.out.print("\nGuess: ");
 				String guess = guessInput.nextLine();
 				if (guess.length() == 1)
