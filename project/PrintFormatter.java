@@ -34,4 +34,8 @@ public class PrintFormatter {
 		
 		return sb.toString();
 	}
+	
+	public boolean isColored(String string) {
+		return string.contains("\033[3");
+	}
 }

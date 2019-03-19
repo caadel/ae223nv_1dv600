@@ -3,6 +3,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Game {
 	private ArrayList<Character> incorrectChars;
@@ -11,25 +13,31 @@ public class Game {
 	private int guesses;
 	private int maxGuesses;
 	private static int wordLength;
-	//private int score; // Will be used in a later iteration
+	private static int score; 
 	private Scanner guessInput; 
 	private static Word word;
+	private Drawing drawing;
+	private static Timer timer = new Timer();
 	private static boolean testModeIsActive;
+	private boolean endlessReplay;
 	
 	public Game() throws IOException {
 		guessInput = new Scanner(System.in);
 		wordList = new WordList();
+		drawing = new Drawing();		
+		maxGuesses = 10;
 		// Default game mode is standard (One word, random length)
 		setGameMode(1);
 		setWordLength(1);
 		testModeIsActive = false;
+		endlessReplay = false;
 	}
 	
 	public void playGame() throws IOException, InterruptedException {
 		// Chose a random word
-		if (testModeIsActive) {
+		if (testModeIsActive)
 			word = new Word("manner");
-		} else {
+		else {
 			if (wordLength == 1)
 				word = wordList.chooseRandomWord();
 			else 
@@ -38,9 +46,11 @@ public class Game {
 		
 		// RESET BEFORE PLAYING
 		guesses = 0;
-		maxGuesses = 10;
+		if (!endlessReplay)
+			score = 0;
 		clear();
 		incorrectChars = new ArrayList<Character>();
+		drawing.setDrawingToHangman();
 		
 		// The actual game
 		guessingLoop();
@@ -56,7 +66,7 @@ public class Game {
 			Game.gameMode = "One word";
 			break;
 		case 3:
-			Game.gameMode = "Survival";
+			Game.gameMode = "Endless";
 			break;
 		case 4:
 			Game.gameMode = "Timed";
@@ -72,18 +82,42 @@ public class Game {
 		return wordLength;
 	}
 	
+	
+	
 	private void guessingLoop() throws InterruptedException, IOException {
-		// Game mode selection will influence this method, to be implemented in the next iteration
 
+		// For the timed game mode, the task is never started in the other game games
+		TimerTask task = new TimerTask() {public void run() {Game.score++;}};
+		if (gameMode.equals("Timed")) 
+			timer.scheduleAtFixedRate(task, 1000, 1000);
+
+		
 		// Playing
-		while (hasNotLost()) {
-			if (hasWon())
-				break;
-			else {
-				String gameModePrint = "Current game mode: "+gameMode;
+		while (!hasEnded()) {
+			if (hasWon()) {
+				if (gameMode.equals("Endless")) {
+					score += (maxGuesses-guesses) * 10 ; // No incorrect guesses = 100p, 4 incorrect guesses = 60p, etc
+					endlessReplay = true;
+					System.out.println("\nCorrect!\n+"+((maxGuesses-guesses)*10)+" points!");
+					Thread.sleep(1500);
+					playGame();
+				} else 
+					break;
+			} else {
+				String gameModePrint = "\n Current game mode: "+gameMode;
+				
 				if (wordLength > 1)
 					gameModePrint = gameModePrint+", word length: "+wordLength;
+				else if (gameMode.equals("Timed"))
+					gameModePrint = gameModePrint+", time: "+score+"s";
+				else if (gameMode.equals("Endless"))
+					gameModePrint = gameModePrint+", score: "+score;
 				System.out.println(gameModePrint);
+				
+				
+				// Hangman drawing
+				System.out.println(drawing.get(guesses));
+				
 				
 				System.out.println("\n"+word.getHiddenWord().toString());
 				
@@ -104,6 +138,11 @@ public class Game {
 				}
 			}
 		}
+		
+		// Stops the timer task after the game is either won or lost
+		task.cancel();
+		// Resets the Endless mode replay loop
+		endlessReplay = false;
 	}
 	
 	// Character guessing
@@ -128,8 +167,8 @@ public class Game {
 	}
 	
 	// True if number of guesses is less than the max allowed guesses
-	private boolean hasNotLost() {
-		return guesses < maxGuesses;
+	private boolean hasEnded() {
+		return guesses == maxGuesses;
 	}
 	// True if the word has been guessed
 	public static boolean hasWon() {
@@ -145,5 +184,6 @@ public class Game {
 	// Test mode = always play with the same word
 	public static void setTestMode(boolean testModeIsActive) {Game.testModeIsActive = true;}
 	public static boolean testModeIsActive() {return Game.testModeIsActive;}
+	public static int getScore() {return score;}
 	
 }
