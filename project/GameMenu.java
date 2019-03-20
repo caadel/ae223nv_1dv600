@@ -30,13 +30,15 @@ public class GameMenu {
 		Game.clear();
 		System.out.println("\n============ HANGMAN GAME ============");
 		
-		String gameMode = Game.getCurrentGameMode()+", length: ";
-		String wordLength;
-		if (Game.getWordLength() == 1)
-			wordLength = "random";
-		else
-			wordLength = Integer.toString(Game.getWordLength());
-		System.out.print("\n 1. Play game ("+gameMode+wordLength+")\n 2. Change game mode\n 3. View scores\n 4. View banned words\n 5. Quit\n\n Select 1, 2, 3, 4 or 5\n\n> ");
+		String gameMode = Game.getCurrentGameMode();
+		if (Game.getCurrentGameMode().equals("One word")) {
+			if (Game.getWordLength() == 1)
+				gameMode = gameMode+", length: random";
+			else
+				gameMode = gameMode+", length: "+Integer.toString(Game.getWordLength());
+		}
+		
+		System.out.print("\n 1. Play game ("+gameMode+")\n 2. Change game mode\n 3. View scores\n 4. View banned words\n 5. Quit\n\n Select 1, 2, 3, 4 or 5\n\n> ");
 		
 		menuChoice = input.nextLine();
 		if (menuChoice.equals("1")) {
@@ -99,6 +101,7 @@ public class GameMenu {
 			incorrectMenuChoice(menuChoice);
 			wordLengthMenu();
 		} else {
+			game.setWordLength(Integer.parseInt(menuChoice));
 			System.out.println("Word length "+menuChoice+" selected!");
 			Thread.sleep(1000);
 		}
