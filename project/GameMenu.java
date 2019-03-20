@@ -149,14 +149,14 @@ public class GameMenu {
 		} else if (menuChoice.equals("3")) {
 			
 			if (format.isColored(save)) {
-				System.out.println(format.color("No score to save!","red"));
+				System.out.println(format.color(" No score to save!","red"));
 				Thread.sleep(1000);
 			} else {
 				Game.clear();
 				System.out.print(" Enter a name \n> ");
 				String name = input.nextLine();
 				
-				System.out.println("Score saved!");
+				System.out.println(" Score saved!");
 				Thread.sleep(750);
 				
 				if (game.getCurrentGameMode().equals("Timed"))
@@ -166,10 +166,15 @@ public class GameMenu {
 				scoreIsSaved = true;
 			}
 		} else if (menuChoice.equals("4")) {
-			fh.saveBannedWord(game.getWord());
-			wordIsBanned = true;
-			System.out.println("Word banned!");
-			Thread.sleep(750);
+			if (format.isColored(ban)) {
+				System.out.println(format.color(" Word already banned!","red"));
+				Thread.sleep(1000);
+			} else {
+				fh.saveBannedWord(game.getWord());
+				wordIsBanned = true;
+				System.out.println(" Word banned!");
+				Thread.sleep(750);
+			}
 		} else if (menuChoice.equals("5"))
 			quitMenu();
 		else
@@ -202,7 +207,7 @@ public class GameMenu {
 				rank++;
 			}
 		} else 
-			System.out.println(" No scores saved!\n");
+			System.out.println(" No scores saved!");
 		
 		System.out.print("\n Type 'delete' to clear all previous scores\n Type anything else to return to the main menu\n\n> ");
 		menuChoice = input.nextLine();
@@ -227,7 +232,7 @@ public class GameMenu {
 				rank++;
 			}
 		} else 
-			System.out.println(" No words have been banned!\n");
+			System.out.println(" No words have been banned!");
 		
 		System.out.print("\n Type 'delete' to clear all banned words\n Type anything else to return to the main menu\n\n> ");
 		menuChoice = input.nextLine();
@@ -245,7 +250,7 @@ public class GameMenu {
 		Game.clear();
 		
 		
-		System.out.print("\nAre you sure you want to quit?"
+		System.out.print("\n Are you sure you want to quit?"
 				+ "\n1. Press 1 to confirm"
 				+ "\n2. Press any other key to return to the previous menu"
 				+ "\n\n> ");
@@ -261,7 +266,7 @@ public class GameMenu {
 		System.exit(-1);
 	}
 	private void incorrectMenuChoice(String choice) throws InterruptedException {
-		System.out.println(format.color("'"+choice+"' is an incorrect menu choice!","red"));
+		System.out.println(format.color(" '"+choice+"' is an incorrect menu choice!","red"));
 		Thread.sleep(1500);
 	}
 	private boolean isInteger(String string) {
