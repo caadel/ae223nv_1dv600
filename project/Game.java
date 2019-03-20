@@ -9,17 +9,17 @@ import java.util.TimerTask;
 public class Game {
 	private ArrayList<Character> incorrectChars;
 	private ArrayList<Word> incorrectWords;
-	private static String gameMode; // Will be used in a later iteration
+	private String gameMode; // Will be used in a later iteration
 	private WordList wordList;
 	private int guesses;
 	private int maxGuesses;
-	private static int wordLength;
-	private static int score; 
+	private int wordLength;
+	private int score; 
 	private Scanner guessInput; 
-	private static Word word;
+	private Word word;
 	private Drawing drawing;
-	private static Timer timer = new Timer();
-	private static boolean testModeIsActive;
+	private Timer timer = new Timer();
+	private boolean testModeIsActive;
 	private boolean endlessReplay;
 	
 	public Game() throws IOException {
@@ -62,26 +62,34 @@ public class Game {
 		// This will be used in a later iteration to change the behaviour of the game
 		switch (gameMode) {
 		case 1:
-			Game.gameMode = "One word";
+			this.gameMode = "One word";
 			break;
 		case 2:
-			Game.gameMode = "One word";
+			this.gameMode = "One word";
 			break;
 		case 3:
-			Game.gameMode = "Endless";
+			this.gameMode = "Endless";
 			break;
 		case 4:
-			Game.gameMode = "Timed";
+			this.gameMode = "Timed";
 			break;
 		default:
 			throw new IllegalArgumentException("Game mode "+gameMode+" does not exist!");
 		}
 	}
+	public String getCurrentGameMode() {return gameMode;}
+	public void setWordLength(int wordLength) {this.wordLength = wordLength;}
+	public int getWordLength() {return wordLength;}
+	public Word getWord() {return word;}
+	// Test mode = always play with the same word
+	public void setTestModeState(boolean setTestModeState) {testModeIsActive = setTestModeState;}
+	public boolean getTestModeState() {return testModeIsActive;}
+	public int getScore() {return score;}
 	
 	private void guessingLoop() throws InterruptedException, IOException {
 
 		// For the timed game mode, the task is never started in the other game games
-		TimerTask task = new TimerTask() {public void run() {Game.score++;}};
+		TimerTask task = new TimerTask() {public void run() {score++;}};
 		if (gameMode.equals("Timed")) 
 			timer.scheduleAtFixedRate(task, 1000, 1000);
 
@@ -188,21 +196,12 @@ public class Game {
 		return guesses == maxGuesses;
 	}
 	// True if the word has been guessed
-	public static boolean hasWon() {
+	public boolean hasWon() {
 		boolean hasWon = true;
 		for (int i = 0; i < word.length(); i++) 
 			if (word.getHiddenWord().charAt(i*2) != word.charAt(i))
 				return false;
 		return hasWon;
 	}
-
-	public void setWordLength(int wordLength) {Game.wordLength = wordLength;}
-	public static int getWordLength() {return wordLength;}
-	public static Word getWord() {return word;}
-	public static String getCurrentGameMode() {return gameMode;}
-	// Test mode = always play with the same word
-	public static void setTestMode(boolean setTestModeState) {testModeIsActive = setTestModeState;}
-	public static boolean testModeIsActive() {return testModeIsActive;}
-	public static int getScore() {return score;}
 	
 }

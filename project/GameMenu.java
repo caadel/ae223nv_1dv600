@@ -11,7 +11,7 @@ public class GameMenu {
 	private boolean wordIsBanned = false;
 	private Scanner input;
 	private String menuChoice;
-	private static PrintFormatter format = new PrintFormatter();
+	private PrintFormatter format = new PrintFormatter();
 	private Drawing hangmanDrawing = new Drawing();
 	private FileHandler fh = new FileHandler();
 	private Game game;
@@ -30,12 +30,12 @@ public class GameMenu {
 		Game.clear();
 		System.out.println("\n============ HANGMAN GAME ============");
 		
-		String gameMode = Game.getCurrentGameMode();
-		if (Game.getCurrentGameMode().equals("One word")) {
-			if (Game.getWordLength() == 1)
+		String gameMode = game.getCurrentGameMode();
+		if (game.getCurrentGameMode().equals("One word")) {
+			if (game.getWordLength() == 1)
 				gameMode = gameMode+", length: random";
 			else
-				gameMode = gameMode+", length: "+Integer.toString(Game.getWordLength());
+				gameMode = gameMode+", length: "+Integer.toString(game.getWordLength());
 		}
 		
 		System.out.print("\n 1. Play game ("+gameMode+")\n 2. Change game mode\n 3. View scores\n 4. View banned words\n 5. Quit\n\n Select 1, 2, 3, 4 or 5\n\n> ");
@@ -55,10 +55,10 @@ public class GameMenu {
 		} else if (menuChoice.equals("5")) {
 			quitMenu();
 		} else if (menuChoice.equals("test")) {
-			if (!Game.testModeIsActive())
-				Game.setTestMode(true);
+			if (!game.getTestModeState())
+				game.setTestModeState(true);
 			else 
-				Game.setTestMode(false);
+				game.setTestModeState(false);
 		} else
 			incorrectMenuChoice(menuChoice);
 			
@@ -115,27 +115,27 @@ public class GameMenu {
 		String scorePrint = "";
 		String save = "Save score";
 		String ban = "Ban word";
-		if (Game.getCurrentGameMode().equals("Timed"))
-			scorePrint = " Time: "+Game.getScore()+" seconds";
-		else if (Game.getCurrentGameMode().equals("Endless"))
-			scorePrint = " Final score: "+Game.getScore()+" points";
+		if (game.getCurrentGameMode().equals("Timed"))
+			scorePrint = " Time: "+game.getScore()+" seconds";
+		else if (game.getCurrentGameMode().equals("Endless"))
+			scorePrint = " Final score: "+game.getScore()+" points";
 		
-		if (Game.hasWon()) {
+		if (game.hasWon()) {
 			System.out.println("\n ====== YOU WIN! ======");
 			System.out.println(hangmanDrawing.get(11));		
 		} else {
 			System.out.println("\n ====== YOU LOSE! ======");
 			System.out.println(hangmanDrawing.get(10));
-			if (!Game.getCurrentGameMode().equals("Endless"))
+			if (!game.getCurrentGameMode().equals("Endless"))
 				save = format.color("Save score", "red");
 		}
 		
-		if (scoreIsSaved || Game.getCurrentGameMode().equals("One word"))
+		if (scoreIsSaved || game.getCurrentGameMode().equals("One word"))
 			save = format.color("Save score", "red");
 		if (wordIsBanned)
 			ban = format.color(ban, "red");
 		
-		System.out.println(" The correct word was "+Game.getWord().toString());
+		System.out.println(" The correct word was "+game.getWord().toString());
 		System.out.println(scorePrint);
 		System.out.println("\n 1. Play again with same settings\n 2. Go to main menu\n 3. "+save+"\n 4. "+ban+"\n 5. Quit");
 		System.out.print("\n> ");
@@ -159,14 +159,14 @@ public class GameMenu {
 				System.out.println("Score saved!");
 				Thread.sleep(750);
 				
-				if (Game.getCurrentGameMode().equals("Timed"))
-					fh.saveTimedScore(name, Game.getScore());
+				if (game.getCurrentGameMode().equals("Timed"))
+					fh.saveTimedScore(name, game.getScore());
 				else
-					fh.saveEndlessScore(name, Game.getScore());
+					fh.saveEndlessScore(name, game.getScore());
 				scoreIsSaved = true;
 			}
 		} else if (menuChoice.equals("4")) {
-			fh.saveBannedWord(Game.getWord());
+			fh.saveBannedWord(game.getWord());
 			wordIsBanned = true;
 			System.out.println("Word banned!");
 			Thread.sleep(750);
@@ -260,11 +260,11 @@ public class GameMenu {
 		input.close();
 		System.exit(-1);
 	}
-	private static void incorrectMenuChoice(String choice) throws InterruptedException {
+	private void incorrectMenuChoice(String choice) throws InterruptedException {
 		System.out.println(format.color("'"+choice+"' is an incorrect menu choice!","red"));
 		Thread.sleep(1500);
 	}
-	public static boolean isInteger(String string) {
+	private boolean isInteger(String string) {
 		try {
 			Integer.valueOf(string);
 			return true;
