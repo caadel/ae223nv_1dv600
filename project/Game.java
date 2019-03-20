@@ -8,6 +8,7 @@ import java.util.TimerTask;
 
 public class Game {
 	private ArrayList<Character> incorrectChars;
+	private ArrayList<Word> incorrectWords;
 	private static String gameMode; // Will be used in a later iteration
 	private WordList wordList;
 	private int guesses;
@@ -50,6 +51,7 @@ public class Game {
 			score = 0;
 		clear();
 		incorrectChars = new ArrayList<Character>();
+		incorrectWords = new ArrayList<Word>();
 		drawing.setDrawingToHangman();
 		
 		// The actual game
@@ -75,14 +77,6 @@ public class Game {
 			throw new IllegalArgumentException("Game mode "+gameMode+" does not exist!");
 		}
 	}
-	public void setWordLength(int wordLength) {
-		Game.wordLength = wordLength;
-	}
-	public static int getWordLength() {
-		return wordLength;
-	}
-	
-	
 	
 	private void guessingLoop() throws InterruptedException, IOException {
 
@@ -91,7 +85,6 @@ public class Game {
 		if (gameMode.equals("Timed")) 
 			timer.scheduleAtFixedRate(task, 1000, 1000);
 
-		
 		// Playing
 		while (!hasEnded()) {
 			if (hasWon()) {
@@ -121,20 +114,30 @@ public class Game {
 				
 				System.out.println("\n"+word.getHiddenWord().toString());
 				
-				if (incorrectChars.size() > 0) {
-					System.out.print("\nIncorrect guesses: ");
-					for (char c : incorrectChars)
-						System.out.print(c+" ");
+				// Printing incorrect guesses
+				System.out.print("\nIncorrect guesses: ");
+				for (char c : incorrectChars) { // letters
+					System.out.print(c);
+					if(c != incorrectChars.get(incorrectChars.size()-1))
+						System.out.print(", ");
 				}
 				
-				System.out.println("\nIncorrect guesses left: "+(maxGuesses-guesses));
+				if(!incorrectChars.isEmpty()) // separator between chars and words
+						System.out.print(", ");
+				
+				for (Word w : incorrectWords) { // words
+					System.out.print(w.toString());
+					if(!w.equals(incorrectWords.get(incorrectWords.size()-1)))
+						System.out.print(", ");
+				}
+				
 				System.out.print("\nGuess: ");
 				String guess = guessInput.nextLine();
 				if (guess.length() == 1)
 					guess(guess.charAt(0));
 				else {
-					clear(); 	// Word guessing not implemented
-								// Guessing more than one letter will not do anything, not even reduce guesses left
+					guess(new Word(guess));
+					clear(); 
 				}
 			}
 		}
@@ -160,6 +163,20 @@ public class Game {
 		
 		clear();
 	}
+	// Word guessing
+	private void guess(Word w) throws InterruptedException, IOException {
+		Word guess = w.toLowerCase();
+		
+		// An incorrect guess gets added to a the list
+		if (!word.equals(guess) && !incorrectWords.contains(guess)) {
+			incorrectWords.add(guess);
+			Collections.sort(incorrectWords);
+			guesses++; 
+		} else 
+			word.updateHiddenWordIfContains(guess);
+		
+		clear();
+	}
 	
 	// Clears the console window, ONLY works using Windows cmd (command prompt)
 	public static void clear() throws InterruptedException, IOException {
@@ -179,11 +196,13 @@ public class Game {
 		return hasWon;
 	}
 
+	public void setWordLength(int wordLength) {Game.wordLength = wordLength;}
+	public static int getWordLength() {return wordLength;}
 	public static Word getWord() {return word;}
 	public static String getCurrentGameMode() {return gameMode;}
 	// Test mode = always play with the same word
-	public static void setTestMode(boolean testModeIsActive) {Game.testModeIsActive = true;}
-	public static boolean testModeIsActive() {return Game.testModeIsActive;}
+	public static void setTestMode(boolean setTestModeState) {testModeIsActive = setTestModeState;}
+	public static boolean testModeIsActive() {return testModeIsActive;}
 	public static int getScore() {return score;}
 	
 }

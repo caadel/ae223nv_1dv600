@@ -14,7 +14,7 @@ public class Word implements Comparable<Word>{
 		length = string.length();
 		hs = new HiddenString();
 	}
-	private Word(String string, int i) { // Only used by hidden word class
+	private Word(String string, int i) { // Only used by hidden string class
 		this.string = string;
 		length = string.length();
 	}
@@ -26,6 +26,7 @@ public class Word implements Comparable<Word>{
 	}
 	public Word getHiddenWord() {return hs.toWord();}
 	public void updateHiddenWordIfContains(char c) {hs.updateHiddenWordIfContains(c);}
+	public void updateHiddenWordIfContains(Word w) {hs.updateHiddenWordIfContains(w);}
 	public void add(char c) {
 		string = string + c;
 		length = string.length();
@@ -40,6 +41,15 @@ public class Word implements Comparable<Word>{
 		for (int i = 0; i < string.length(); i++)
 			if (string.charAt(i) == c)
 				return true;
+		return false;
+	}
+	public Word toLowerCase() {return new Word(string.toLowerCase());}
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Word) {
+			Word other = (Word) o;
+			return string.equals(other.toString());
+		}
 		return false;
 	}
 	@Override
@@ -70,6 +80,17 @@ public class Word implements Comparable<Word>{
 				}
 			}
 		}
+		private void updateHiddenWordIfContains(Word w) {
+			if (w.toString().equals(string)) {
+				StringBuilder sb = new StringBuilder();
+				for (int i = 0; i < string.length(); i++)
+						sb.append(string.charAt(i)+" ");
+				
+				hiddenString = sb.toString();
+			}
+			
+		}
+
 		private Word toWord() {return new Word(hiddenString,1);}
 	}
 

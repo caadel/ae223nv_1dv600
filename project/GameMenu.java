@@ -71,8 +71,7 @@ public class GameMenu {
 				+ "\n3. Guess on as many words as you can until you lose"
 				+ "\n4. Guess on a random word, with a timer!"
 				+ "\n\n> ");
-		
-		
+				
 		menuChoice = input.nextLine();
 		
 		if (menuChoice.equals("1") || menuChoice.equals("3") || menuChoice.equals("4")) {
@@ -105,8 +104,6 @@ public class GameMenu {
 		}
 		
 	}
-	
-	
 	
 	private void endOfGameMenu() throws InterruptedException, IOException {
 		Game.clear();
