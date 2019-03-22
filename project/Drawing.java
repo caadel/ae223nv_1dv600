@@ -1,5 +1,8 @@
 package project;
-
+/*
+ * Other motifs can be added instead of the hangman in the future 
+ * if a more child-friendly version were to be developed.
+ */
 public class Drawing {
 
 	private String[] drawings;
@@ -10,7 +13,7 @@ public class Drawing {
 	
 	public String get(int index) { 
 		if (index < 0 || index >= drawings.length)
-			throw new IndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException("Index must be between 0 and 12!");
 		
 		return drawings[index];
 	}

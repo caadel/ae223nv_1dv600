@@ -69,4 +69,13 @@ public class WordList {
 		
 		return filteredList.get(word);
 	}
+	
+	public boolean contains(Word w) {
+		for (Word w2 : wordList)
+			if (w.toString().equals(w2.toString()))
+				return true;
+		
+		return false;
+	}
+	public int size() {return wordList.size();}
 }
