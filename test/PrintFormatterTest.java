@@ -27,5 +27,23 @@ class PrintFormatterTest {
 		
 		assertThrows(IllegalArgumentException.class, () ->  sut.color("Test", "black"));
 	}
+	@Test
+	void shouldReturnFalseIfStringIsNotColored() {
+		sut = new PrintFormatter();
+		
+		String testString = "Text";
+		
+		assertFalse(sut.isColored(testString));
+	}
+	@Test
+	void shouldReturnTrueIfStringIsColored() {
+		sut = new PrintFormatter();
+		
+		String testString = "Text";
+		
+		testString = sut.color(testString, "blue");
+		
+		assertTrue(sut.isColored(testString));
+	}
 
 }

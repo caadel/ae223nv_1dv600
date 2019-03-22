@@ -52,6 +52,29 @@ class WordTest {
 		assertTrue(sut.getHiddenWord().length() == sut.length()*2);
 	}
 	@Test
+	void shouldReturnLowerCaseWord() {
+		sut = new Word("Test");
+		assertTrue(sut.toLowerCase().toString().equals("test"));
+	}
+	@Test
+	void shouldReturnTrueIfWordEqualsOtherWord() {
+		sut = new Word("Test");
+		Word sut2 = new Word("Test");
+		assertTrue(sut.equals(sut2));
+	}
+	@Test
+	void shouldReturnFalseIfWordIsNotEqualToOtherWord() {
+		sut = new Word("Test");
+		Word sut2 = new Word("k");
+		assertFalse(sut.equals(sut2));
+	}
+	@Test
+	void shouldReturnFalseIfWordIsNotEqualToOtherObject() {
+		sut = new Word("Test");
+		String sut2 = "Test";
+		assertFalse(sut.equals(sut2));
+	}
+	@Test
 	void hiddenWordShouldCorrectlyConsistOfSpacesAndUnderscores() {
 		// Checks that the hidden word is correct ("Test" = "_ _ _ _ ")
 		sut = new Word("Test");
@@ -100,5 +123,14 @@ class WordTest {
 		
 		assertTrue(sut.getHiddenWord().toString().equals("_ e _ _ - _ _ _ e "));
 	}
+	@Test
+	void shouldRevealHiddenWordIfCrrectWordIsGuessed() {
+		sut = new Word("Test");
+		sut.updateHiddenWordIfContains(new Word("Test"));
+		
+		System.out.println(sut.getHiddenWord());
+		assertTrue(sut.getHiddenWord().toString().equals("T e s t "));
+		
+ }
 
 }
