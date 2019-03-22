@@ -120,10 +120,10 @@ public class Game {
 				System.out.println(drawing.get(guesses));
 				
 				
-				System.out.println("\n"+word.getHiddenWord().toString());
+				System.out.println("\n "+word.getHiddenWord().toString());
 				
 				// Printing incorrect guesses
-				System.out.print("\nIncorrect guesses: ");
+				System.out.print("\n Incorrect guesses: ");
 				for (char c : incorrectChars) { // letters
 					System.out.print(c);
 					if(c != incorrectChars.get(incorrectChars.size()-1))
@@ -139,7 +139,7 @@ public class Game {
 						System.out.print(", ");
 				}
 				
-				System.out.print("\nGuess: ");
+				System.out.print("\n Guess: ");
 				String guess = guessInput.nextLine();
 				if (guess.length() == 1)
 					guess(guess.charAt(0));

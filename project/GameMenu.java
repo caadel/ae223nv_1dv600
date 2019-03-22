@@ -28,7 +28,7 @@ public class GameMenu {
 	
 	private void mainMenu() throws InterruptedException, IOException {
 		Game.clear();
-		System.out.println("\n============ HANGMAN GAME ============");
+		System.out.println("\n ============ HANGMAN GAME ============");
 		
 		String gameMode = game.getCurrentGameMode();
 		if (game.getCurrentGameMode().equals("One word")) {
@@ -67,11 +67,11 @@ public class GameMenu {
 	
 	private void gameModeMenu() throws InterruptedException, IOException {
 		Game.clear();
-		System.out.print("\nSelect a game mode:"
-				+ "\n1. Guess on a random word"
-				+ "\n2. Guess on a random word with a specific length (of your choosing)"
-				+ "\n3. Guess on as many words as you can until you lose"
-				+ "\n4. Guess on a random word, with a timer!"
+		System.out.print("\n Select a game mode:"
+				+ "\n 1. Guess on a random word"
+				+ "\n 2. Guess on a random word with a specific length"
+				+ "\n 3. Guess on as many words as you can until you lose"
+				+ "\n 4. Guess on a random word, with a timer!"
 				+ "\n\n> ");
 				
 		menuChoice = input.nextLine();
@@ -251,8 +251,8 @@ public class GameMenu {
 		
 		
 		System.out.print("\n Are you sure you want to quit?"
-				+ "\n1. Press 1 to confirm"
-				+ "\n2. Press any other key to return to the previous menu"
+				+ "\n 1. Press 1 to confirm"
+				+ "\n 2. Press any other key to return to the previous menu"
 				+ "\n\n> ");
 		
 		menuChoice = input.nextLine();
